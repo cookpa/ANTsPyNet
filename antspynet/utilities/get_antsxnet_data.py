@@ -39,7 +39,15 @@ def get_antsxnet_data(file_id=None,
             "protonLungTemplate": "https://ndownloader.figshare.com/files/22707338",
             "ctLungTemplate": "https://ndownloader.figshare.com/files/22707335",
             "priorDktLabels": "https://ndownloader.figshare.com/files/24139802",
-            "S_template3": "https://ndownloader.figshare.com/files/22597175"
+            "S_template3": "https://ndownloader.figshare.com/files/22597175",
+            "priorDeepFlashLeftLabels": "https://ndownloader.figshare.com/files/25422098",
+            "priorDeepFlashRightLabels": "https://ndownloader.figshare.com/files/25422101",
+            "adni": "https://ndownloader.figshare.com/files/25516361",
+            "ixi": "https://ndownloader.figshare.com/files/25516358",
+            "mni152": "https://ndownloader.figshare.com/files/25516349",
+            "nki": "https://ndownloader.figshare.com/files/25516355",
+            "nki10": "https://ndownloader.figshare.com/files/25516346",
+            "oasis": "https://ndownloader.figshare.com/files/25516352"
         }
         return(switcher.get(argument, "Invalid argument."))
 
@@ -51,8 +59,16 @@ def get_antsxnet_data(file_id=None,
                   "mprage_hippmapp3r",
                   "protonLungTemplate",
                   "ctLungTemplate",
-                  "priorDktLabels",
                   "S_template3",
+                  "priorDktLabels",
+                  "priorDeepFlashLeftLabels",
+                  "priorDeepFlashRightLabels",
+                  "adni",
+                  "ixi",
+                  "mni152",
+                  "nki",
+                  "nki10",
+                  "oasis",
                   "show")
 
     if not file_id in valid_list:

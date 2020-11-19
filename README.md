@@ -71,13 +71,17 @@ Documentation page [https://antsx.github.io/ANTsPyNet/](https://antsx.github.io/
     * [Proton](https://www.ncbi.nlm.nih.gov/pubmed/30195415)
     * CT
 * Six-tissue Atropos brain segmentation
+* [Cortical thickness](https://www.medrxiv.org/content/10.1101/2020.10.19.20215392v1.full)
 * [Brain age](https://academic.oup.com/brain/article-abstract/143/7/2312/5863667?redirectedFrom=fulltext)
 * [Hippmapp3r hippocampal segmentation](https://pubmed.ncbi.nlm.nih.gov/31609046/)
 * [White matter hyperintensity segmentation](https://pubmed.ncbi.nlm.nih.gov/30125711/)
 * [Neural style transfer](https://arxiv.org/abs/1508.06576)
 * Deep Flash
 * Desikan-Killiany-Tourville cortical labeling
-
+* Image quality assessment
+    * [TID2013](https://www.sciencedirect.com/science/article/pii/S0923596514001490)
+    * [KonIQ-10k](https://ieeexplore.ieee.org/document/8968750)
+    
 ## Miscellaneous
 
 * [Mixture density networks (MDN)](https://publications.aston.ac.uk/373/1/NCRG_94_004.pdf)

@@ -321,7 +321,7 @@ when using this layer as the first layer in a model.</p>
 <h2>Image patch<a class="headerlink" href="#image-patch" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="antspynet.utilities.extract_image_patches">
-<code class="sig-prename descclassname">antspynet.utilities.</code><code class="sig-name descname">extract_image_patches</code><span class="sig-paren">(</span><em class="sig-param">image</em>, <em class="sig-param">patch_size</em>, <em class="sig-param">max_number_of_patches='all'</em>, <em class="sig-param">stride_length=1</em>, <em class="sig-param">mask_image=None</em>, <em class="sig-param">random_seed=None</em>, <em class="sig-param">return_as_array=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/antspynet/utilities/extract_image_patches.html#extract_image_patches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#antspynet.utilities.extract_image_patches" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">antspynet.utilities.</code><code class="sig-name descname">extract_image_patches</code><span class="sig-paren">(</span><em class="sig-param">image</em>, <em class="sig-param">patch_size</em>, <em class="sig-param">max_number_of_patches='all'</em>, <em class="sig-param">stride_length=1</em>, <em class="sig-param">mask_image=None</em>, <em class="sig-param">random_seed=None</em>, <em class="sig-param">return_as_array=False</em>, <em class="sig-param">randomize=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/antspynet/utilities/extract_image_patches.html#extract_image_patches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#antspynet.utilities.extract_image_patches" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract 2-D or 3-D image patches.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -341,6 +341,7 @@ each returned patch to have a masked voxel at its center.</p></li>
 False (default) the return type is a list where each element is
 a single patch.  Otherwise the return type is an array of size
 dim( number_of_patches, patch_size ).</p></li>
+<li><p><strong>randomize</strong> (<em>boolean</em>) – Boolean controlling whether we randomize indices when masking.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -626,7 +627,7 @@ weights.</p></li>
 <h2>Applications<a class="headerlink" href="#applications" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="antspynet.utilities.brain_extraction">
-<code class="sig-prename descclassname">antspynet.utilities.</code><code class="sig-name descname">brain_extraction</code><span class="sig-paren">(</span><em class="sig-param">image</em>, <em class="sig-param">modality='t1'</em>, <em class="sig-param">antsxnet_cache_directory=None</em>, <em class="sig-param">verbose=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/antspynet/utilities/brain_extraction.html#brain_extraction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#antspynet.utilities.brain_extraction" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">antspynet.utilities.</code><code class="sig-name descname">brain_extraction</code><span class="sig-paren">(</span><em class="sig-param">image</em>, <em class="sig-param">modality='t1'</em>, <em class="sig-param">antsxnet_cache_directory=None</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/antspynet/utilities/brain_extraction.html#brain_extraction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#antspynet.utilities.brain_extraction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform brain extraction using U-net and ANTs-based training data.  “NoBrainer”
 is also possible where brain extraction uses U-net and FreeSurfer training data
 ported from the</p>
@@ -670,6 +671,74 @@ Since these can be resused, if is None, these data will be downloaded to a
 </dl>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">probability_brain_mask</span> <span class="o">=</span> <span class="n">brain_extraction</span><span class="p">(</span><span class="n">brain_image</span><span class="p">,</span> <span class="n">modality</span><span class="o">=</span><span class="s2">&quot;t1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="antspynet.utilities.cortical_thickness">
+<code class="sig-prename descclassname">antspynet.utilities.</code><code class="sig-name descname">cortical_thickness</code><span class="sig-paren">(</span><em class="sig-param">t1</em>, <em class="sig-param">antsxnet_cache_directory=None</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/antspynet/utilities/cortical_thickness.html#cortical_thickness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#antspynet.utilities.cortical_thickness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform KellyKapowski cortical thickness using deep_atropos for
+segmentation.  Description concerning implementaiton and evaluation:</p>
+<p><a class="reference external" href="https://www.medrxiv.org/content/10.1101/2020.10.19.20215392v1">https://www.medrxiv.org/content/10.1101/2020.10.19.20215392v1</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t1</strong> (<em>ANTsImage</em>) – input 3-D unprocessed T1-weighted brain image.</p></li>
+<li><p><strong>antsxnet_cache_directory</strong> (<em>string</em>) – Destination directory for storing the downloaded template and model weights.
+Since these can be resused, if is None, these data will be downloaded to a
+~/.keras/ANTsXNet/.</p></li>
+<li><p><strong>verbose</strong> (<em>boolean</em>) – Print progress to the screen.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Cortical thickness image and segmentation probability images.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">image</span> <span class="o">=</span> <span class="n">ants</span><span class="o">.</span><span class="n">image_read</span><span class="p">(</span><span class="s2">&quot;t1w_image.nii.gz&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kk</span> <span class="o">=</span> <span class="n">cortical_thickness</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="antspynet.utilities.longitudinal_cortical_thickness">
+<code class="sig-prename descclassname">antspynet.utilities.</code><code class="sig-name descname">longitudinal_cortical_thickness</code><span class="sig-paren">(</span><em class="sig-param">t1s</em>, <em class="sig-param">initial_template='oasis'</em>, <em class="sig-param">number_of_iterations=1</em>, <em class="sig-param">refinement_transform='antsRegistrationSyNQuick[a]'</em>, <em class="sig-param">antsxnet_cache_directory=None</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/antspynet/utilities/cortical_thickness.html#longitudinal_cortical_thickness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#antspynet.utilities.longitudinal_cortical_thickness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform KellyKapowski cortical thickness longitudinally using code{deepAtropos}
+for segmentation of the derived single-subject template.  It takes inspiration from
+the work described here:</p>
+<p><a class="reference external" href="https://pubmed.ncbi.nlm.nih.gov/31356207/">https://pubmed.ncbi.nlm.nih.gov/31356207/</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t1s</strong> (<em>list of ANTsImage</em>) – Input list of 3-D unprocessed t1-weighted brain images from a single subject.</p></li>
+<li><p><strong>initial_template</strong> (<em>string</em><em> or </em><em>ANTsImage</em>) – Input image to define the orientation of the SST.  Can be a string (see
+get_antsxnet_data) or a specified template.  This allows the user to create a
+SST outside of this routine.</p></li>
+<li><p><strong>number_of_iterations</strong> (<em>int</em>) – Defines the number of iterations for refining the SST.</p></li>
+<li><p><strong>refinement_transform</strong> (<em>string</em>) – Transform for defining the refinement registration transform. See options in
+ants.registration.</p></li>
+<li><p><strong>antsxnet_cache_directory</strong> (<em>string</em>) – Destination directory for storing the downloaded template and model weights.
+Since these can be resused, if is None, these data will be downloaded to a
+~/.keras/ANTsXNet/.</p></li>
+<li><p><strong>verbose</strong> (<em>boolean</em>) – Print progress to the screen.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Cortical thickness image and segmentation probability images.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t1s</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t1s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ants</span><span class="o">.</span><span class="n">image_read</span><span class="p">(</span><span class="s2">&quot;t1w_image.nii.gz&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kk</span> <span class="o">=</span> <span class="n">longitudinal_cortical_thickness</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -842,7 +911,7 @@ Since these can be resused, if is None, these data will be downloaded to a
 
 <dl class="function">
 <dt id="antspynet.utilities.deep_flash">
-<code class="sig-prename descclassname">antspynet.utilities.</code><code class="sig-name descname">deep_flash</code><span class="sig-paren">(</span><em class="sig-param">t1</em>, <em class="sig-param">do_preprocessing=True</em>, <em class="sig-param">antsxnet_cache_directory=None</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/antspynet/utilities/deep_flash.html#deep_flash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#antspynet.utilities.deep_flash" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">antspynet.utilities.</code><code class="sig-name descname">deep_flash</code><span class="sig-paren">(</span><em class="sig-param">t1</em>, <em class="sig-param">do_preprocessing=True</em>, <em class="sig-param">do_per_hemisphere=True</em>, <em class="sig-param">antsxnet_cache_directory=None</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/antspynet/utilities/deep_flash.html#deep_flash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#antspynet.utilities.deep_flash" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hippocampal/Enthorhinal segmentation using “Deep Flash”</p>
 <p>Perform hippocampal/entorhinal segmentation in T1 images using
 labels from Mike Yassa’s lab</p>
@@ -880,6 +949,8 @@ do_preprocessing = True</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>t1</strong> (<em>ANTsImage</em>) – raw or preprocessed 3-D T1-weighted brain image.</p></li>
 <li><p><strong>do_preprocessing</strong> (<em>boolean</em>) – See description above.</p></li>
+<li><p><strong>do_per_hemisphere</strong> (<em>boolean</em>) – If True, do prediction based on separate networks per hemisphere.  Otherwise,
+use the single network trained for both hemispheres.</p></li>
 <li><p><strong>antsxnet_cache_directory</strong> (<em>string</em>) – Destination directory for storing the downloaded template and model weights.
 Since these can be resused, if is None, these data will be downloaded to a
 ~/.keras/ANTsXNet/.</p></li>
@@ -1176,6 +1247,59 @@ Since these can be resused, if is None, these data will be downloaded to a
 </dd></dl>
 
 <dl class="function">
+<dt id="antspynet.utilities.tid_neural_image_assessment">
+<code class="sig-prename descclassname">antspynet.utilities.</code><code class="sig-name descname">tid_neural_image_assessment</code><span class="sig-paren">(</span><em class="sig-param">image</em>, <em class="sig-param">mask=None</em>, <em class="sig-param">patch_size=101</em>, <em class="sig-param">stride_length=None</em>, <em class="sig-param">padding_size=0</em>, <em class="sig-param">dimensions_to_predict=0</em>, <em class="sig-param">antsxnet_cache_directory=None</em>, <em class="sig-param">which_model='tidsQualityAssessment'</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/antspynet/utilities/quality_assessment.html#tid_neural_image_assessment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#antspynet.utilities.tid_neural_image_assessment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform MOS-based assessment of an image.</p>
+<p>Use a ResNet architecture to estimate image quality in 2D or 3D using subjective
+QC image databases described in</p>
+<p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0923596514001490">https://www.sciencedirect.com/science/article/pii/S0923596514001490</a></p>
+<p>or</p>
+<p><a class="reference external" href="https://doi.org/10.1109/TIP.2020.2967829">https://doi.org/10.1109/TIP.2020.2967829</a></p>
+<p>where the image assessment is either “global”, i.e., a single number or an image
+based on the specified patch size.  In the 3-D case, neighboring slices are used
+for each estimate.  Note that parameters should be kept as consistent as possible
+in order to enable comparison.  Patch size should be roughly 1/12th to 1/4th of
+image size to enable locality. A global estimate can be gained by setting
+patch_size = “global”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>ANTsImage</em><em> (</em><em>2-D</em><em> or </em><em>3-D</em><em>)</em>) – input image.</p></li>
+<li><p><strong>mask</strong> (<em>ANTsImage</em><em> (</em><em>2-D</em><em> or </em><em>3-D</em><em>)</em>) – optional mask for designating calculation ROI.</p></li>
+<li><p><strong>patch_size</strong> (<em>integer</em>) – prime number of patch_size.  101 is good.  Otherwise, choose “global” for a single
+global estimate of quality.</p></li>
+<li><p><strong>stride_length</strong> (<em>integer</em><em> or </em><em>vector of image dimension length</em>) – optional value to speed up computation (typically less than patch size).</p></li>
+<li><p><strong>padding_size</strong> (<em>positive</em><em> or </em><em>negative integer</em><em> or </em><em>vector of image dimension length</em>) – de(padding) to remove edge effects.</p></li>
+<li><p><strong>dimensions_to_predict</strong> (<em>integer</em><em> or </em><em>vector</em>) – if image dimension is 3, this parameter specifies which dimensions should be used for
+prediction.  If more than one dimension is specified, the results are averaged.</p></li>
+<li><p><strong>antsxnet_cache_directory</strong> (<em>string</em>) – Destination directory for storing the downloaded template and model weights.
+Since these can be resused, if is None, these data will be downloaded to
+~/.keras/ANTsXNet/.</p></li>
+<li><p><strong>which_model</strong> (<em>string</em>) – model type e.g. string tidsQualityAssessment, koniqMS, koniqMS2 or koniqMS3 where
+the former predicts mean opinion score (MOS) and MOS standard deviation and
+the latter koniq models predict mean opinion score (MOS) and sharpness.</p></li>
+<li><p><strong>verbose</strong> (<em>boolean</em>) – Print progress to the screen.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>List of QC results predicting both both human rater’s mean and standard</em></p></li>
+<li><p><em>deviation of the MOS (“mean opinion scores”) or sharpness depending on the</em></p></li>
+<li><p><em>selected network.  Both aggregate and spatial scores are returned, the latter</em></p></li>
+<li><p><em>in the form of an image.</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">image</span> <span class="o">=</span> <span class="n">ants</span><span class="o">.</span><span class="n">image_read</span><span class="p">(</span><span class="n">ants</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="s2">&quot;r16&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mask</span> <span class="o">=</span> <span class="n">ants</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tid</span> <span class="o">=</span> <span class="n">tid_neural_image_assessment</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">patch_size</span><span class="o">=</span><span class="mi">101</span><span class="p">,</span> <span class="n">stride_length</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
 <dt id="antspynet.utilities.neural_style_transfer">
 <code class="sig-prename descclassname">antspynet.utilities.</code><code class="sig-name descname">neural_style_transfer</code><span class="sig-paren">(</span><em class="sig-param">content_image, style_images, initial_combination_image=None, number_of_iterations=10, learning_rate=1.0, total_variation_weight=8.5e-05, content_weight=0.025, style_image_weights=1.0, content_layer_names=['block5_conv2'], style_layer_names='all', content_mask=None, style_masks=None, use_shifted_activations=True, use_chained_inference=True, verbose=False, output_prefix=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/antspynet/utilities/neural_style_transfer.html#neural_style_transfer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#antspynet.utilities.neural_style_transfer" title="Permalink to this definition">¶</a></dt>
 <dd><p>The popular neural style transfer described here:</p>
@@ -1265,7 +1389,35 @@ to the subdirectory ~/.keras/ANTsXNet/.</p></li>
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model_file</span> <span class="o">=</span> <span class="n">get_pretrained_network</span><span class="p">(</span> <span class="s1">&#39;dbpn4x&#39;</span> <span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model_file</span> <span class="o">=</span> <span class="n">get_pretrained_network</span><span class="p">(</span><span class="s1">&#39;dbpn4x&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="antspynet.utilities.get_antsxnet_data">
+<code class="sig-prename descclassname">antspynet.utilities.</code><code class="sig-name descname">get_antsxnet_data</code><span class="sig-paren">(</span><em class="sig-param">file_id=None</em>, <em class="sig-param">target_file_name=None</em>, <em class="sig-param">antsxnet_cache_directory=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/antspynet/utilities/get_antsxnet_data.html#get_antsxnet_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#antspynet.utilities.get_antsxnet_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download data such as prefabricated templates and spatial priors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> (<em>antsxnet_cache_directory</em>) – One of the permitted file ids or pass “show” to list all
+valid possibilities. Note that most require internet access
+to download.</p></li>
+<li><p><strong>string</strong> – Optional target filename.</p></li>
+<li><p><strong>string</strong> – Optional target output.  If not specified these data will be downloaded
+to the subdirectory ~/.keras/ANTsXNet/.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>A filename string</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">template_file</span> <span class="o">=</span> <span class="n">get_antsxnet_data</span><span class="p">(</span><span class="s1">&#39;biobank&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

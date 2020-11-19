@@ -72,6 +72,8 @@ Applications
 ------------
 
 .. autofunction:: antspynet.utilities.brain_extraction
+.. autofunction:: antspynet.utilities.cortical_thickness
+.. autofunction:: antspynet.utilities.longitudinal_cortical_thickness
 .. autofunction:: antspynet.utilities.lung_extraction
 .. autofunction:: antspynet.utilities.preprocess_brain_image
 .. autofunction:: antspynet.utilities.sysu_media_wmh_segmentation
@@ -81,6 +83,7 @@ Applications
 .. autofunction:: antspynet.utilities.desikan_killiany_tourville_labeling
 .. autofunction:: antspynet.utilities.brain_age
 .. autofunction:: antspynet.utilities.mri_super_resolution
+.. autofunction:: antspynet.utilities.tid_neural_image_assessment
 .. autofunction:: antspynet.utilities.neural_style_transfer
 
 Miscellaneous
