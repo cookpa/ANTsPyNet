@@ -8,7 +8,7 @@ We don't use ANTsPy as a base layer because of dependency conflicts.
 
 ## Version and dependency information
 
-Run the container with `-m pip freeze` to get version information.
+See `requirements.txt` for the versions of ANTsPyNet and its dependencies.
 
 
 ## Run time data
